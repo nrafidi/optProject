@@ -1,0 +1,45 @@
+function [B, slackVars] = coordDesc(X, Y, lambda, gamma1, gamma2, coordFuncs, objFunc, Psi, Theta)
+
+%coordFuncs is a cell array: the first entry contains the updates for B,
+%and the additional entries contain any slack variable updates
+
+tolerance = 1e-4;%Unsure
+
+[~, p] = size(X,2);
+[~, q] = size(Y,2);
+numSlack = length(coordFuncs)-1;
+
+B = zeros(p, q);
+
+slackVars = cell(1, numSlack);
+for i = 2:(numSlack+1)
+    slackVars{i-1} = zeros(size(coordFuncs{i}));
+end
+
+currObj = feval(objFunc, X, Y, B, slackVars, lambda, gamma1, gamma2);
+prevObj = 10e10;
+while abs(currObj - prevObj) > tolerance
+    for i = 1:(numSlack+1)
+        if i == 1
+            for j = 1:p
+                for k = 1:q
+                    B(j,k) = feval(coordFuncs{i}, X, Y, B, Psi, Theta, slackVars);
+        else
+            for j = 1:numSlack
+                slackFuncs = funcs{j};
+                [s1, s2] = size(slackFuncs);
+                for k = 1:s1
+                    for l = 1:s2
+                        if j == 1
+                            slackVars{j}(k,l) = feval(slackFuncs{k,l}, B, Psi, Theta, slackVars{j});
+                        end
+                    end
+                end
+            end
+        end
+    end
+    
+    prevObj = currObj;
+    currObj = feval(objFunc, X, Y, B, slackVars, lambda, gamma1, gamma2);
+end
+end

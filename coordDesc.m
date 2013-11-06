@@ -19,7 +19,7 @@ while abs(currObj - prevObj) > tolerance
         if i == 1
             B = feval(coordFuncs{i}, X, Y, B, Psi, Theta, slackVars);
         else
-            slackVars{i-1} = feval(coordFuncs{i},  X, Y, B, Psi, Theta, slackVars);
+            slackVars{i-1} = feval(coordFuncs{i},  X, Y, B, Psi, Theta, slackVars, lambda, gamma1, gamma2);
         end
     end
     

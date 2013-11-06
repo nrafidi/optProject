@@ -1,0 +1,12 @@
+function slackVar = fusedFusedSlack2Update(~, ~, B, Psi, ~, slackVars, lambda, gamma1, gamma2) %#ok<*INUSD>
+
+[p, q] = size(B);
+
+slackVar = zeros(p, q, p);
+
+for j = 1:p
+    slackVar(j,:,:) = Psi.*repmat(abs(B(j,:) - sigm(Psi
+end
+
+
+end
