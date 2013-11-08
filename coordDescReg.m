@@ -10,7 +10,7 @@ k = n; %number of folds for CV
 cvInd = crossvalind('Kfold', n, k);
 
 %Choose Lambda, fixing gamma1 and gamma2 to 0
-cverrs = zeros(r, 1);
+cverrs = zeros(R, 1);
 for r = 1:R
     %Cross validation
     for kk = 1:k

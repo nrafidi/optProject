@@ -3,7 +3,7 @@ function obj = fusedObjective(X, Y, B, slackVar, lambda, gamma1, gamma2, Psi, Th
 p = size(Psi, 1);
 q = size(Theta, 1);
 
-obj = trace(Y - X*B) + lambda*sum(sum((B.^2)./slackVar{1}));
+obj = trace((Y - X*B)'*(Y - X*B)) + lambda*sum(sum((B.^2)./slackVar{1}));
 
 pen1 = 0;
 for l = 1:p
@@ -15,7 +15,7 @@ end
 pen2 = 0;
 for r = 1:q
     for s = r:q
-        pen2 = pen2 + Theta(r,s)^2*sum((B(:,r) - sign(Theta(r,s))*B(:,s))./squeeze(slackVar{3}(:, l, m)));
+        pen2 = pen2 + Theta(r,s)^2*sum((B(:,r) - sign(Theta(r,s))*B(:,s))./squeeze(slackVar{3}(:, r, s)));
     end
 end
 
