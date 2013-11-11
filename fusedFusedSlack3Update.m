@@ -2,13 +2,15 @@ function slackVar = fusedFusedSlack3Update(~, ~, B, ~, Theta, slackVars, lambda,
 
 [p, q] = size(B);
 
-slackVar = zeros(p, q, q);
+slackVar = slackVars{3};
 normalize = 0;
 for j = 1:p
     for r = 1:q
         for s = 1:q
-            slackVar(j, r, s) = Theta(r,s)*abs(B(j,r) - sign(Theta(r,s))*B(j, s));
-            normalize = normalize + Theta(r,s)*abs(B(j,r) - sign(Theta(r,s))*B(j, s));
+            if r ~=s
+                slackVar(j, r, s) = Theta(r,s)*abs(B(j,r) - sign(Theta(r,s))*B(j, s));
+                normalize = normalize + Theta(r,s)*abs(B(j,r) - sign(Theta(r,s))*B(j, s));
+            end
         end
     end
 end

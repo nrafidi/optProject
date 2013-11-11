@@ -3,7 +3,8 @@ function [B, slackVars] = coordDesc(X, Y, lambda, gamma1, gamma2, coordFuncs, ob
 %coordFuncs is a cell array: the first entry contains the updates for B,
 %and the additional entries contain any slack variable updates
 
-tolerance = 1e-6;%Unsure
+
+tolerance = 1e-8;%Unsure
 
 p = size(X,2);
 q = size(Y,2);
@@ -17,8 +18,10 @@ slackVars{2} = rand(q,p,p);
 slackVars{3} = rand(p,q,q);
 
 currObj = feval(objFunc, X, Y, B, slackVars, lambda, gamma1, gamma2, Psi, Theta);
-prevObj = 10e10;
+prevObj = 10e12;
+numIT = 0;
 while abs(currObj - prevObj) > tolerance
+    numIT = numIT + 1;
     for i = 1:(numSlack+1)
         if i == 1
             B = feval(coordFuncs{i}, X, Y, B, Psi, Theta, slackVars, lambda, gamma1, gamma2);
@@ -31,4 +34,6 @@ while abs(currObj - prevObj) > tolerance
     currObj = feval(objFunc, X, Y, B, slackVars, lambda, gamma1, gamma2, Psi, Theta);
 %     disp('meow')
 end
+fprintf('Diff = %d\n', abs(currObj-prevObj));
+fprintf('%d Iterations\n', numIT);
 end
