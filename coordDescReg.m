@@ -1,12 +1,14 @@
 function [B, slackVar, lambda, gamma1, gamma2] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta)
 
 %Parameter Selection - rough iterative grid search
-regParams = [.0000001 .000001 .00001 .0001 .001 .01 .1 .5 1 5 10 50 100 500 1000 10000 20000 50000 ...
-    100000 500000 1000000 5000000 10000000];
-R = length(regParams);
+lambdas = [0.01, 0.1, 1];
+gammas = 0.1;%[0.01, 0.1, 1, 10];
+% regParams = [50 ... %[.0000001 .000001 .00001 .0001 .001 .01 .1 .5 1 5 10 50 100 500 1000 10000 20000 50000 ...
+%     100000 500000 1000000 5000000 10000000];
+R = length(gammas);
 
 n = size(X,1);
-k = n; %number of folds for CV
+k = n/50; %number of folds for CV
 cvInd = crossvalind('Kfold', n, k);
 
 %Choose Lambda, fixing gamma1 and gamma2 to 0
@@ -14,36 +16,46 @@ cverrs = zeros(R, 1);
 for r = 1:R
     %Cross validation
     for kk = 1:k
-        Breg = coordDesc(X(cvInd~=kk, :), Y(cvInd~=kk,:), regParams(r), 0, 0, coordFuncs, objFunc, Psi, Theta);
+        Breg = coordDesc(X(cvInd~=kk, :), Y(cvInd~=kk,:), lambdas(r), 0, 0, coordFuncs, objFunc, Psi, Theta);
         cverrs(r) = cverrs(r) + norm(Y(cvInd==kk,:) - X(cvInd==kk,:)*Breg)/k;
     end
+    fprintf('Woof\n');
 end
 [~, ind] = min(cverrs);
-lambda = regParams(ind);
-
+lambda = lambdas(ind);
+B = coordDesc(X, Y, lambda, 0, 0, coordFuncs, objFunc, Psi, Theta);
+figure
+imagesc(B)
+title('Lambda only');
+fprintf('Lambda done\n');
+% keyboard;
 %Choose gamma1
 cverrs = zeros(r, 1);
 for r = 1:R
     %Cross validation
     for kk = 1:k
-        Breg = coordDesc(X(cvInd~=kk, :), Y(cvInd~=kk,:), lambda, regParams(r), 0, coordFuncs, objFunc, Psi, Theta);
+        Breg = coordDesc(X(cvInd~=kk, :), Y(cvInd~=kk,:), lambda, gammas(r), 0, coordFuncs, objFunc, Psi, Theta);
         cverrs(r) = cverrs(r) + norm(Y(cvInd==kk,:) - X(cvInd==kk,:)*Breg)/k;
     end
+    fprintf('Meow\n');
 end
 [~, ind] = min(cverrs);
-gamma1 = regParams(ind);
-
+gamma1 = gammas(ind);
+B = coordDesc(X, Y, lambda, gamma1, 0, coordFuncs, objFunc, Psi, Theta);
+figure
+imagesc(B)
+keyboard;
 %Choose gamma2
 cverrs = zeros(r, 1);
 for r = 1:R
     %Cross validation
     for kk = 1:k
-        Breg = coordDesc(X(cvInd~=kk, :), Y(cvInd~=kk,:), lambda, gamma1, regParams(r), coordFuncs, objFunc, Psi, Theta);
+        Breg = coordDesc(X(cvInd~=kk, :), Y(cvInd~=kk,:), lambda, gamma1, gammas(r), coordFuncs, objFunc, Psi, Theta);
         cverrs(r) = cverrs(r) + norm(Y(cvInd==kk,:) - X(cvInd==kk,:)*Breg)/k;
     end
 end
 [~, ind] = min(cverrs);
-gamma2 = regParams(ind);
+gamma2 = gammas(ind);
 
 %Parameter Selection - gradient descent -
 tolerance = 1e-4;

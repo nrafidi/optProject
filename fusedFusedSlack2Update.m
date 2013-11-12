@@ -10,9 +10,12 @@ for k = 1:q
             if (m~=l)
                 slackVar(k, l, m) = Psi(l,m)*abs(B(l,k) - sign(Psi(l,m))*B(m, k));
                 normalize = normalize + Psi(l,m)*abs(B(l,k) - sign(Psi(l,m))*B(m, k));
+            else
+                slackVar(k,l,m) = 1e-8;
+                normalize = normalize + 1e-8;
             end
-            if slackVar(k,l,m) == 0
-                keyboard;
+            if abs(slackVar(k,l,m)) <= 10^(-150)
+%                 keyboard;
             end
         end
     end

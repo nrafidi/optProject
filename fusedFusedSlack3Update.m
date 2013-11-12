@@ -10,6 +10,12 @@ for j = 1:p
             if r ~=s
                 slackVar(j, r, s) = Theta(r,s)*abs(B(j,r) - sign(Theta(r,s))*B(j, s));
                 normalize = normalize + Theta(r,s)*abs(B(j,r) - sign(Theta(r,s))*B(j, s));
+            else
+                slackVar(j,r,s) = 1e-8;
+                normalize = normalize + 1e-8;
+            end
+            if abs(slackVar(j,r,s)) <= 10^(-17)
+%                 keyboard;
             end
         end
     end

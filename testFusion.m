@@ -9,15 +9,17 @@ coordFuncs = {@fusedFusedUpdate; @fusedFusedSlack1Update; @fusedFusedSlack2Updat
 %% Sanity check: Test the fused coordinate descent and compare resulting B
 
 % Parameters for Synthetic Data
-n = 10; %number of samples
-p = 3; %number of features
-q = 2; %number of outputs
+n = 100; %number of samples
+p = 10; %number of features
+q = 30; %number of outputs
 
 density = 0.5; %density of trueB
 
 [X, Y, Psi, Theta, trueB] = synthData(n, p, q, density);
 
-
+figure
+imagesc(trueB)
+title('truth');
 tic
 [B, slackVar, lambda, gamma1, gamma2] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta);
 toc
