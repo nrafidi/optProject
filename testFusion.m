@@ -1,5 +1,6 @@
 %% Initialization
 clear;
+close all;
 clc;
 
 % Functions to pass to coordinate descent
@@ -18,7 +19,7 @@ q = 30; %number of outputs
 % [X, Y, Psi, Theta, trueB] = synthData(n, p, q, density);
 [X, Y, Psi, Theta, trueB] = synthDataNew(n, p, q);
 
-figure
+subplot(2,2,1);
 imagesc(trueB)
 title('truth');
 tic
