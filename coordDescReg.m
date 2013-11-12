@@ -1,8 +1,8 @@
 function [B, slackVar, lambda, gamma1, gamma2] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta)
 
 %Parameter Selection - rough iterative grid search
-lambdas = [0.01, 0.1, 1];
-gammas = 0.1;%[0.01, 0.1, 1, 10];
+lambdas = [0.001, 0.01, 0.1, 1];
+gammas = [0.001, 0.01, 0.1, 1];%[0.01, 0.1, 1, 10];
 % regParams = [50 ... %[.0000001 .000001 .00001 .0001 .001 .01 .1 .5 1 5 10 50 100 500 1000 10000 20000 50000 ...
 %     100000 500000 1000000 5000000 10000000];
 R = length(gammas);

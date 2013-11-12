@@ -36,17 +36,22 @@ while abs(currObj - prevObj) > tolerance
         end
     end
     if numIT > 500
-%         keyboard;
-        disp(abs(currObj-prevObj))
+        %         keyboard;
+        break;
     end
     prevObj = currObj;
     currObj = feval(objFunc, X, Y, B, slackVars, lambda, gamma1, gamma2, Psi, Theta);
     if currObj < 0
         keyboard;
     end
-%     disp('meow')
-% fprintf('Diff = %d\n', abs(currObj-prevObj));
-% fprintf('Obj = %d\n', currObj);
+    if currObj - prevObj > 0
+        keyboard;
+    end
+    %     disp('meow')
+    % fprintf('Diff = %d\n', abs(currObj-prevObj));
+    if gamma1 ~= 0
+        fprintf('Obj = %d\n', currObj);
+    end
 end
 % fprintf('Diff = %d\n', abs(currObj-prevObj));
 fprintf('%d Iterations\n', numIT);

@@ -13,9 +13,10 @@ n = 100; %number of samples
 p = 10; %number of features
 q = 30; %number of outputs
 
-density = 0.5; %density of trueB
+% density = 0.5; %density of trueB
 
-[X, Y, Psi, Theta, trueB] = synthData(n, p, q, density);
+% [X, Y, Psi, Theta, trueB] = synthData(n, p, q, density);
+[X, Y, Psi, Theta, trueB] = synthDataNew(n, p, q);
 
 figure
 imagesc(trueB)

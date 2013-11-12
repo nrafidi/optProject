@@ -13,15 +13,18 @@ for j = 1:p
         end
         Bold = B;
         B(j,k) = sum(X(:,j).*(Y(:,k) - X(:,indX ~=j)*Bold(indX ~=j, k)));
+        denom = sum(X(:,j).^2) + lambda/slackVars{1}(j,k);
         if gamma1 ~= 0
             B(j,k) = B(j,k) + gamma1*sum((Psi(j,:)'.^2.*sign(Psi(j,:)').*Bold(:,k))./squeeze(slackVars{2}(k, j, :)));
+            denom = denom + gamma1*sum(Psi(j,:)'.^2./squeeze(slackVars{2}(k, j, :)));
         end
         if gamma2 ~= 0
             B(j,k) = B(j,k) + gamma2*sum((Theta(k,:)'.^2.*sign(Theta(k,:)').*Bold(j,:)')./squeeze(slackVars{3}(j, k, :)));
+            denom = denom + gamma2*sum(Theta(k,:)'.^2./squeeze(slackVars{3}(j, k, :)));
         end
-        B(j,k) = B(j,k)/(sum(X(:,j).^2) + lambda/slackVars{1}(j,k) + ...
-            gamma1*sum(Psi(j,:)'.^2./squeeze(slackVars{2}(k, j, :))) + ...
-            gamma2*sum(Theta(k,:)'.^2./squeeze(slackVars{3}(j, k, :))));
+        
+        B(j,k) = B(j,k)/denom;
+            
         if isnan(B(j,k)) || isinf(B(j,k))
             keyboard;
         end
