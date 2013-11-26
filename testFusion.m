@@ -37,27 +37,28 @@ p = 10;
 q = 30;
 
 N = 1000;
-totalIT = zeros(1, N/10);
-accs = zeros(1, N/10);
+totalIT = zeros(1, N/100);
+accs = zeros(1, N/100);
 t = 1;
-for n = 10:10:N
-    
-    [X, Y, Psi, Theta, trueB] = synthDataNew(n, p, q);
-    
-    [B, slackVar, lambda, gamma1, gamma2, totalIT(t), avgIT] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta);
+
+[X, Y, Psi, Theta, trueB] = synthDataNew(N, p, q);
+
+for n = 100:100:N
+        
+    [B, slackVar, lambda, gamma1, gamma2, totalIT(t), avgIT] = coordDescReg(X(1:n,:), Y(1:n,:), coordFuncs, objFunc, Psi, Theta);
     fprintf('Iterations: %d\n', totalIT(t));
     accs(t) = norm(B - trueB);
     t = t+1;
 end
 
-save fusedFusedVaryN times accs;
+save fusedFusedVaryN totalIT accs;
 figure;
-plot(10:10:N, accs, 'r')
+plot(100:100:N, accs, 'r')
 xlabel('Number of Samples');
 ylabel('||B - trueB||');
 title('Accuracy versus Number of Samples');
 figure;
-plot(10:10:N, times, 'b')
+plot(100:100:N, totalIT, 'b')
 xlabel('Number of Samples');
 ylabel('Number of Iterations');
 title('Number of Iterations versus Number of Samples');

@@ -35,7 +35,7 @@ while abs(currObj - prevObj) > tolerance
             end
         end
     end
-    if numIT > 500
+    if numIT > 200
         %         keyboard;
         break;
     end
