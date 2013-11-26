@@ -31,21 +31,24 @@ disp(B);
 fprintf('True B:\n');
 disp(trueB);
 
-%% Experiment 1: How number of iterations and accuracy vary with n
+%% Experiment 1: How time and accuracy vary with n
 % Parameters for Synthetic Data
 p = 10;
-q = 30;
+q = 10;
+
+density = 0.5;
 
 N = 1000;
-totalIT = zeros(1, N/10);
+times = zeros(1, N/10);
 accs = zeros(1, N/10);
 t = 1;
 for n = 10:10:N
     
-    [X, Y, Psi, Theta, trueB] = synthDataNew(n, p, q);
+    [X, Y, Psi, Theta, trueB] = synthData(n, p, q, density);
     
-    [B, slackVar, lambda, gamma1, gamma2, totalIT(t), avgIT] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta);
-    fprintf('Iterations: %d\n', totalIT(t));
+    time = cputime;
+    [B, slackVar, lambda, gamma1, gamma2] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta);
+    times(t) = cputime - time;
     accs(t) = norm(B - trueB);
     t = t+1;
 end
@@ -59,8 +62,8 @@ title('Accuracy versus Number of Samples');
 figure;
 plot(10:10:N, times, 'b')
 xlabel('Number of Samples');
-ylabel('Number of Iterations');
-title('Number of Iterations versus Number of Samples');
+ylabel('Runtime (s)');
+title('Runtime versus Number of Samples');
 %% Experiment 2: How time and accuracy vary with p
 
 % Parameters for Synthetic Data

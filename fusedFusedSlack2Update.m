@@ -11,8 +11,8 @@ for k = 1:q
                 slackVar(k, l, m) = abs(Psi(l,m))*abs(B(l,k) - sign(Psi(l,m))*B(m, k));
                 normalize = normalize + abs(Psi(l,m))*abs(B(l,k) - sign(Psi(l,m))*B(m, k));
             else
-                slackVar(k,l,m) = 1e-8;
-                normalize = normalize + 1e-8;
+                slackVar(k,l,m) = 1;%1e-8;
+                normalize = normalize + 1;%1e-8;
             end
             %Lower bound
             if slackVar(k,l,m) <= 10^(-150)

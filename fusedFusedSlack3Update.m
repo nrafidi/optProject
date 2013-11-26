@@ -11,8 +11,8 @@ for j = 1:p
                 slackVar(j, r, s) = abs(Theta(r,s))*abs(B(j,r) - sign(Theta(r,s))*B(j, s));
                 normalize = normalize + abs(Theta(r,s))*abs(B(j,r) - sign(Theta(r,s))*B(j, s));
             else
-                slackVar(j,r,s) = 1e-8;
-                normalize = normalize + 1e-8;
+                slackVar(j,r,s) = 1;%1e-8;
+                normalize = normalize + 1;%1e-8;
             end
             if slackVar(j,r,s) <= 10^(-150)
                 slackVar(j,r,s) = 10^(-100);
