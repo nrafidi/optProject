@@ -15,7 +15,12 @@ for j = 1:p
         B(j,k) = sum(X(:,j).*(Y(:,k) - X(:,indX ~=j)*Bold(indX ~=j, k)));
         denom = sum(X(:,j).^2) + lambda/slackVars{1}(j,k);
         if gamma1 ~= 0
-            B(j,k) = B(j,k) + gamma1*sum((Psi(j,:)'.^2.*sign(Psi(j,:)').*Bold(:,k))./squeeze(slackVars{2}(k, j, :)));
+            B(j,k) = B(j,k) + gamma1*(sum((Psi(j,:)'.^2.*sign(Psi(j,:)').*Bold(:,k))./squeeze(slackVars{2}(k, j, :))));% + ...
+                %sum((Psi(:,j).^2.*sign(Psi(:,j)).*Bold(:,k))./squeeze(slackVars{2}(k, :, j))'));
+%             if (sum((Psi(j,:)'.^2.*sign(Psi(j,:)').*Bold(:,k))./squeeze(slackVars{2}(k, j, :))) ... 
+%                     == sum((Psi(:,j).^2.*sign(Psi(:,j)).*Bold(:,k))./squeeze(slackVars{2}(k, :, j))'))
+%                 fprintf('equal\n');
+%             end
             denom = denom + gamma1*sum(Psi(j,:)'.^2./squeeze(slackVars{2}(k, j, :)));
         end
         if gamma2 ~= 0

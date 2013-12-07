@@ -1,4 +1,4 @@
-function [B, slackVars] = coordDesc(X, Y, lambda, gamma1, gamma2, coordFuncs, objFunc, Psi, Theta, Bstart)
+function [B, slackVars, numIT] = coordDesc(X, Y, lambda, gamma1, gamma2, coordFuncs, objFunc, Psi, Theta, Bstart)
 
 %coordFuncs is a cell array: the first entry contains the updates for B,
 %and the additional entries contain any slack variable updates
@@ -35,7 +35,7 @@ while abs(currObj - prevObj) > tolerance
             end
         end
     end
-    if numIT > 300
+    if numIT > 200
         %         keyboard;
         break;
     end
@@ -45,7 +45,8 @@ while abs(currObj - prevObj) > tolerance
         keyboard;
     end
     if currObj - prevObj > 0 && numIT > 1
-        keyboard;
+%         keyboard;
+           break;
     end
     %     disp('meow')
     % fprintf('Diff = %d\n', abs(currObj-prevObj));
@@ -54,5 +55,5 @@ while abs(currObj - prevObj) > tolerance
 %     end
 end
 % fprintf('Diff = %d\n', abs(currObj-prevObj));
-fprintf('%d Iterations\n', numIT);
+% fprintf('%d Iterations\n', numIT);
 end
