@@ -23,16 +23,18 @@ gamma1First = paramOrder(2);
 gamma2First = paramOrder(3);
 lambdaSec = paramOrder(4);
 gamma1Sec = paramOrder(5);
-doPlot = 1;
+doPlot = 0;
 
 if lambdaFirst
     [lambda, avgIT] = chooseLambda(p,q,R,k,cvInd,avgIT,X,Y,lambdas,gamma1, gamma2, coordFuncs, objFunc, Psi, Theta);
+    fprintf('Lambda done\n');
     if doPlot
         B = coordDesc(X, Y, lambda, gamma1, gamma2, coordFuncs, objFunc, Psi, Theta, rand(p,q));
         plotB(2, B, lambda, gamma1, gamma2);
     end
     if gamma1Sec
         [gamma1, avgIT] = chooseGamma1(p,q,R,k,cvInd,avgIT,X,Y,lambda,gammas, gamma2, coordFuncs, objFunc, Psi, Theta);
+        fprintf('Gamma1 done\n');
         if doPlot
             B = coordDesc(X, Y, lambda, gamma1, gamma2, coordFuncs, objFunc, Psi, Theta, rand(p,q));
             plotB(3, B, lambda, gamma1, gamma2);
@@ -45,6 +47,7 @@ if lambdaFirst
             plotB(3, B, lambda, gamma1, gamma2);
         end
         [gamma1, avgIT] = chooseGamma1(p,q,R,k,cvInd,avgIT,X,Y,lambda,gammas, gamma2, coordFuncs, objFunc, Psi, Theta);
+        fprintf('Gamma1 done\n');
     end
 elseif gamma2First
     [gamma2, avgIT] = chooseGamma2(p,q,R,k,cvInd,avgIT,X,Y,lambda,gamma1, gammas, coordFuncs, objFunc, Psi, Theta);
@@ -54,27 +57,33 @@ elseif gamma2First
     end
     if lambdaSec
         [lambda, avgIT] = chooseLambda(p,q,R,k,cvInd,avgIT,X,Y,lambdas,gamma1, gamma2, coordFuncs, objFunc, Psi, Theta);
+        fprintf('Lambda done\n');
         if doPlot
             B = coordDesc(X, Y, lambda, gamma1, gamma2, coordFuncs, objFunc, Psi, Theta, rand(p,q));
             plotB(3, B, lambda, gamma1, gamma2);
         end
         [gamma1, avgIT] = chooseGamma1(p,q,R,k,cvInd,avgIT,X,Y,lambda,gammas, gamma2, coordFuncs, objFunc, Psi, Theta);
+        fprintf('Gamma1 done\n');
     else
         [gamma1, avgIT] = chooseGamma1(p,q,R,k,cvInd,avgIT,X,Y,lambda,gammas, gamma2, coordFuncs, objFunc, Psi, Theta);
+        fprintf('Gamma1 done\n');
         if doPlot
             B = coordDesc(X, Y, lambda, gamma1, gamma2, coordFuncs, objFunc, Psi, Theta, rand(p,q));
             plotB(3, B, lambda, gamma1, gamma2);
         end
         [lambda, avgIT] = chooseLambda(p,q,R,k,cvInd,avgIT,X,Y,lambdas,gamma1, gamma2, coordFuncs, objFunc, Psi, Theta);
+        fprintf('Lambda done\n');
     end
 elseif gamma1First %#ok<*UNRCH>
     [gamma1, avgIT] = chooseGamma1(p,q,R,k,cvInd,avgIT,X,Y,lambda,gammas, gamma2, coordFuncs, objFunc, Psi, Theta);
+    fprintf('Gamma1 done\n');
     if doPlot
         B = coordDesc(X, Y, lambda, gamma1, gamma2, coordFuncs, objFunc, Psi, Theta, rand(p,q));
         plotB(2, B, lambda, gamma1, gamma2);
     end
     if lambdaSec
         [lambda, avgIT] = chooseLambda(p,q,R,k,cvInd,avgIT,X,Y,lambdas,gamma1, gamma2, coordFuncs, objFunc, Psi, Theta);
+        fprintf('Lambda done\n');
         if doPlot
             B = coordDesc(X, Y, lambda, gamma1, gamma2, coordFuncs, objFunc, Psi, Theta, rand(p,q));
             plotB(3, B, lambda, gamma1, gamma2);
@@ -87,6 +96,7 @@ elseif gamma1First %#ok<*UNRCH>
             plotB(3, B, lambda, gamma1, gamma2);
         end
         [lambda, avgIT] = chooseLambda(p,q,R,k,cvInd,avgIT,X,Y,lambdas,gamma1, gamma2, coordFuncs, objFunc, Psi, Theta);
+        fprintf('Lambda done\n');
     end
 end
 
