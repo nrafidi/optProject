@@ -19,17 +19,70 @@ q = 30; %number of outputs
 % [X, Y, Psi, Theta, trueB] = synthData(n, p, q, density);
 [X, Y, Psi, Theta, trueB] = synthDataNew(n, p, q);
 
+figure;
 subplot(2,2,1);
 imagesc(trueB)
 title('truth');
 colorbar;
-tic
-[B, slackVar, lambda, gamma1, gamma2] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta);
-toc
-fprintf('Learned B:\n');
-disp(B);
-fprintf('True B:\n');
-disp(trueB);
+paramOrder = [1 0 0 0 1];
+[B1, slackVar, lambda, gamma1, gamma2] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta, paramOrder);
+
+figure;
+subplot(2,2,1);
+imagesc(trueB)
+title('truth');
+colorbar;
+paramOrder = [1 0 0 0 0];
+[B2, slackVar, lambda, gamma1, gamma2] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta, paramOrder);
+
+figure;
+subplot(2,2,1);
+imagesc(trueB)
+title('truth');
+colorbar;
+paramOrder = [0 1 0 1 0];
+[B3, slackVar, lambda, gamma1, gamma2] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta, paramOrder);
+
+figure;
+subplot(2,2,1);
+imagesc(trueB)
+title('truth');
+colorbar;
+paramOrder = [0 1 0 0 0];
+[B4, slackVar, lambda, gamma1, gamma2] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta, paramOrder);
+
+figure;
+subplot(2,2,1);
+imagesc(trueB)
+title('truth');
+colorbar;
+paramOrder = [0 0 1 1 0];
+[B5, slackVar, lambda, gamma1, gamma2] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta, paramOrder);
+
+figure;
+subplot(2,2,1);
+imagesc(trueB)
+title('truth');
+colorbar;
+paramOrder = [0 0 1 0 1];
+[B6, slackVar, lambda, gamma1, gamma2] = coordDescReg(X, Y, coordFuncs, objFunc, Psi, Theta, paramOrder);
+
+twoNorms = [norm(trueB- B1, 2);norm(trueB- B2, 2);norm(trueB- B3, 2);norm(trueB- B4, 2);norm(trueB- B5, 2);norm(trueB- B6, 2);];
+
+[~, ind] = min(twoNorms);
+disp(ind);
+
+disp(norm(trueB- B1, 2));
+disp(norm(trueB- B2, 2));
+disp(norm(trueB- B3, 2));
+disp(norm(trueB- B4, 2));
+disp(norm(trueB- B5, 2));
+disp(norm(trueB- B6, 2));
+
+% fprintf('Learned B:\n');
+% disp(B(1:10,1:10));
+% fprintf('True B:\n');
+% disp(trueB(1:10,1:10));
 
 %% Experiment 1: How number of iterations and accuracy vary with n
 % Parameters for Synthetic Data
@@ -42,16 +95,17 @@ accs = zeros(1, N/100);
 t = 1;
 
 [X, Y, Psi, Theta, trueB] = synthDataNew(N, p, q);
+paramOrder = [0 0 1 1 0];
 
 for n = 100:100:N
         
-    [B, slackVar, lambda, gamma1, gamma2, totalIT(t), avgIT] = coordDescReg(X(1:n,:), Y(1:n,:), coordFuncs, objFunc, Psi, Theta);
+    [B, slackVar, lambda, gamma1, gamma2, totalIT(t), avgIT] = coordDescReg(X(1:n,:), Y(1:n,:), coordFuncs, objFunc, Psi, Theta, paramOrder);
     fprintf('Iterations: %d\n', totalIT(t));
     accs(t) = norm(B - trueB);
     t = t+1;
 end
 
-save fusedFusedVaryN totalIT accs;
+save fusedFusedVaryN_order5 totalIT accs;
 figure;
 plot(100:100:N, accs, 'r')
 xlabel('Number of Samples');
@@ -67,8 +121,6 @@ title('Number of Iterations versus Number of Samples');
 % Parameters for Synthetic Data
 n = 100;
 q = 10;
-
-density = 0.5;
 
 P = 1000;
 times = zeros(1, P/10);
