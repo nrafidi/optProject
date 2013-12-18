@@ -1,8 +1,8 @@
 subjects = 'ABCD';
 load ../brainData/semantic_data.mat;
-% load ../brainData/C_matrices.mat;
-% addpath ./spg_package/SPG_singletask/
-% install_mex;
+load ../brainData/C_matrices.mat;
+addpath ./spg_package/SPG_singletask/
+install_mex;
 
 if false
 %% Coordinate Descent Code - Training
@@ -41,9 +41,9 @@ for s = 1:S
     for ss = 1:S
         if ss ~= s
             load(['../brainData/' subjects(ss) '_data.mat']);
-            Yhat = X(:, 1:3:306)*betas{s};
+            Yhat = X*betas{s};
             for n = 1:N
-                d = pdist([Yhat(n,:); Y(:,1:218)], 'cosine');
+                d = pdist([Yhat(n,:); Y], 'cosine');
                 [~,ind] = sort(d(1:N));
                 ranks(n) = find(n==ind);
             end
@@ -71,7 +71,7 @@ for s = 1:length(subjects)
 end
 
 save ../brainData/betasSPG.mat betas;
-
+if false
 %% Coordinate Descent Code - Testing and Plotting
 
 if ~exist('betas', 'var')
@@ -110,3 +110,4 @@ colorbar;
 xlabel('Testing Subject');
 ylabel('Training Subject');
 title('Rank Accuracy Scores Across Subjects');
+end

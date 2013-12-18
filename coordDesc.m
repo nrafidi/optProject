@@ -21,6 +21,7 @@ currObj = feval(objFunc, X, Y, B, slackVars, lambda, gamma1, gamma2, Psi, Theta)
 prevObj = 10e20;
 numIT = 0;
 while abs(currObj - prevObj) > tolerance
+    tic
     numIT = numIT + 1;
     for i = 1:(numSlack+1)
         if i == 1
@@ -45,14 +46,15 @@ while abs(currObj - prevObj) > tolerance
         keyboard;
     end
     if currObj - prevObj > 0 && numIT > 1
-%         keyboard;
-           break;
+        %         keyboard;
+        break;
     end
+    toc
     %     disp('meow')
     % fprintf('Diff = %d\n', abs(currObj-prevObj));
-%     if gamma1 ~= 0
-%         fprintf('Obj = %d\n', currObj);
-%     end
+    %     if gamma1 ~= 0
+    %         fprintf('Obj = %d\n', currObj);
+    %     end
 end
 % fprintf('Diff = %d\n', abs(currObj-prevObj));
 % fprintf('%d Iterations\n', numIT);
